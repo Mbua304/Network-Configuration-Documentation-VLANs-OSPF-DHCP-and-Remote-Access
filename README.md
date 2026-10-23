@@ -4,10 +4,16 @@
 
 ## 1. Overview
 The network has two switches, three routers, one DHCP server and eight PCs. The 10.3.16.0/21 block is divided into four VLANs and three point-to-point links. Each switch connects to its router with a single cable, so inter-VLAN routing is done with router-on-a-stick (a trunk on the switch and subinterfaces on the router). OSPF (area 0) connects the three routers. The DHCP server sits behind Router1, so Router0 and Router2 relay DHCP requests with ip helper-address.
+<img width="777" height="340" alt="image" src="https://github.com/user-attachments/assets/7e814584-819e-48ff-92b1-d361b3e66594" />
+
+
 
 Topology (left to right):
 PC0, PC1 (VLAN 10) and PC2, PC3 (VLAN 11) connect to Switch0 (SW-A / SW-1), which connects to Router0. Router0 connects to Router1, which also connects to Server0 (DHCP) above it. Router1 connects to Router2, which connects to Switch1 (SW-B / SW-2). PC4, PC5 (VLAN 20) and PC6, PC7 (VLAN 21) connect to Switch1.
 In the final diagram all link lights are green.
+<img width="1638" height="588" alt="image" src="https://github.com/user-attachments/assets/fc1ede57-6a47-4d4e-a3dc-d3530b624f25" />
+
+
 ## 2. Addressing plan
 ## Segment
 Network
@@ -298,6 +304,7 @@ VLAN21
 255.255.255.128
 120
 Each pool starts just after its gateway so a PC never receives the router's address. Max users is kept below the usable host count of each subnet.
+
 ## 12. Step 8: Assignment requirements
 12.1 Switch changes (VLAN names by color, 10 ports per VLAN, unused ports shut down, remote access)
 VLANs were renamed to match the diagram colors: VLAN 10 BLUE, VLAN 11 RED, VLAN 20 GREEN, VLAN 21 ORANGE. Each VLAN received 10 ports (its two original PC ports plus eight more). Leftover ports were shut down. A management IP on a VLAN interface allows Telnet to the switch.
@@ -521,13 +528,16 @@ Refused
 ACL counters
 show access-lists on Router0 (in privileged mode)
 Match counters increase
+
 ## 14. Problems encountered and fixes
 • Invalid input on the switch: the prompt was typed along with the command. Fix: type only what follows the #.
 • Empty show interfaces trunk: the trunk was set on the wrong or not yet connected port. Fix: check show interfaces status, set the trunk on the connected uplink, and bring up the router side.
 • Red link light between switch and router: router interfaces are shut down by default. Fix: no shutdown on the router interface.
 • show access-lists rejected: the router was in user mode (Router0>) after the console password was added. Fix: type enable and the enable password first.
+
 ## 15. Final state
 All links are green, VLANs are named and populated, OSPF connects the three routers, DHCP relay is in place, every line and enable mode is protected with testi2026, SSH is enforced on R-A2, VLAN 11 is limited to VLAN 10, unused ports are shut down, and R-A2 shows a MOTD banner.
+
 ## Done by 
 ## Nelson Mbua Mosisah
 ## Cybersecurity Analyst
